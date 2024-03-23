@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frieza Force Quest Board</title>
+  <style>
+    body {
+      background-image: url('https://ih1.redbubble.net/image.358859422.7382/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: purple; /* Adjusted text color to purple */
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .quest {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: rgba(255, 0, 0, 0.5); /* Transparent red for quest boxes */
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Stroke effect for quest boxes */
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #800080; /* Purple color for buttons */
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-shadow: 2px 2px 5px #000; /* Stroke effect for button text */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="text-shadow: 2px 2px 5px #000;">Frieza Force Quest Board</h1> <!-- Adding stroke effect to the title -->
+    <div class="quest" id="quest">
+      <h2 style="text-shadow: 1px 1px 3px #000;">Random Quest</h2> <!-- Adding stroke effect to the section title -->
+      <p>Year: 732</p>
+      <p id="quest-description">Click the button below to get a random quest.</p>
+      <button onclick="getRandomQuest()">Random Quest</button>
+      <button onclick="addMoreQuests()">Add 15 more</button>
+    </div>
+  </div>
+
+  <script>
+    var quests = [
+      "Defeat traitors",
+      "Resupply a station",
+      "Get resources"
+    ];
+
+    function getRandomQuest() {
+      var randomIndex = Math.floor(Math.random() * quests.length);
+      var randomQuest = quests[randomIndex];
+      document.getElementById("quest-description").innerText = randomQuest;
+    }
+
+    function addMoreQuests() {
+      var moreQuests = [
+        "Assist reconnaissance team",
+        "Sabotage enemy communications",
+        "Protect civilian convoy",
+        "Retrieve stolen artifacts",
+        "Neutralize rogue androids",
+        "Infiltrate enemy base",
+        "Destroy enemy weapon prototype",
+        "Secure strategic outpost",
+        "Escort diplomat to peace talks",
+        "Investigate mysterious signals",
+        "Recover lost intel",
+        "Train new recruits",
+        "Eliminate high-value targets",
+        "Conduct stealth mission",
+        "Navigate hazardous terrain"
+      ];
+      quests = quests.concat(moreQuests);
+      alert("15 more quests added!");
+    }
+  </script>
+</body>
+</html>
