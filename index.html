@@ -1,87 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Frieza Force Quest Board</title>
-  <style>
-    body {
-      background-image: url('https://ih1.redbubble.net/image.358859422.7382/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      color: purple; /* Adjusted text color to purple */
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .quest {
-      margin-bottom: 10px;
-      padding: 10px;
-      background-color: rgba(255, 0, 0, 0.5); /* Transparent red for quest boxes */
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Stroke effect for quest boxes */
-    }
-    button {
-      padding: 10px 20px;
-      background-color: #800080; /* Purple color for buttons */
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      text-shadow: 2px 2px 5px #000; /* Stroke effect for button text */
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Scouter Decoder - Planet Vegeta</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+  body {
+    margin: 0; padding: 0;
+    background: #0a0014;
+    color: #00ff00;
+    font-family: 'Orbitron', monospace;
+    display: flex; flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  #scouter {
+    position: relative;
+    width: 450px;
+    background: radial-gradient(circle at center, #001100 30%, #003300 80%);
+    border: 3px solid #00ff00;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00ff00;
+    padding: 20px;
+    text-align: center;
+  }
+
+  h1 {
+    color: #00ff00;
+    font-weight: 700;
+    text-shadow:
+      0 0 5px #00ff00,
+      0 0 10px #00ff00,
+      0 0 20px #00ff00;
+    margin-bottom: 15px;
+  }
+
+  .question {
+    margin: 20px 0 10px;
+    font-size: 1.2em;
+  }
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  button.choice {
+    background: transparent;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    padding: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 8px;
+    text-shadow: 0 0 8px #00ff00;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  button.choice:hover {
+    background-color: #00ff00;
+    color: #001100;
+    font-weight: bold;
+    text-shadow: none;
+  }
+
+  #output {
+    margin-top: 25px;
+    font-size: 1em;
+    min-height: 80px;
+    line-height: 1.4;
+    white-space: pre-line;
+    border: 1px solid #00ff00;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: inset 0 0 15px #00ff00;
+    background: #002200;
+  }
+
+  #scanline {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #00ff00, transparent);
+    animation: scan 3s linear infinite;
+    border-radius: 10px;
+  }
+
+  @keyframes scan {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  #footer {
+    margin-top: 20px;
+    color: #004400;
+    font-size: 0.8em;
+    font-style: italic;
+    user-select: none;
+  }
+
+  #file-choices {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  button.file-choice {
+    background: transparent;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 8px;
+    font-size: 0.9em;
+    cursor: pointer;
+    border-radius: 6px;
+    text-shadow: 0 0 6px #00ff00;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  button.file-choice:hover {
+    background-color: #00ff00;
+    color: #001100;
+    font-weight: bold;
+    text-shadow: none;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1 style="text-shadow: 2px 2px 5px #000;">Frieza Force Quest Board</h1> <!-- Adding stroke effect to the title -->
-    <div class="quest" id="quest">
-      <h2 style="text-shadow: 1px 1px 3px #000;">Random Quest</h2> <!-- Adding stroke effect to the section title -->
-      <p>Year: 732</p>
-      <p id="quest-description">Click the button below to get a random quest.</p>
-      <button onclick="getRandomQuest()">Random Quest</button>
-      <button onclick="addMoreQuests()">Add 15 more</button>
+  <div id="scouter">
+    <h1>SCOUTER DECODE - PLANET VEGETA</h1>
+    <div id="scanline"></div>
+
+    <div id="question-area">
+      <div class="question" id="question-text"></div>
+      <div class="choices" id="choices"></div>
     </div>
+
+    <div id="output"></div>
   </div>
 
-  <script>
-    var quests = [
-      "Defeat traitors",
-      "Resupply a station",
-      "Get resources"
-    ];
+  <div id="footer">POWER LEVEL ANALYSIS - DATA ACQUISITION IN PROGRESS...</div>
 
-    function getRandomQuest() {
-      var randomIndex = Math.floor(Math.random() * quests.length);
-      var randomQuest = quests[randomIndex];
-      document.getElementById("quest-description").innerText = randomQuest;
+<script>
+  const questions = [
+    {
+      text: "What do you suspect about King Vegeta's heirs?",
+      choices: [
+        "They hide a secret child out of wedlock.",
+        "All heirs are publicly acknowledged.",
+        "He has no heirs besides Prince Vegeta.",
+        "He has exiled many potential heirs."
+      ],
+      outputs: [
+        "Hidden bloodlines detected... uncertainty grows.",
+        "Official records confirmed, but is it all truth?",
+        "Only the prince remains, but whispers say otherwise.",
+        "Exile shadows the royal family, unknown dangers lurk."
+      ]
+    },
+    {
+      text: "What do you hear about the Saiyan Super Legend?",
+      choices: [
+        "A warrior who can destroy planets at will.",
+        "Just a myth told to scare low-class Saiyans.",
+        "An ancient prophecy hidden in the stars.",
+        "A name erased from all records deliberately."
+      ],
+      outputs: [
+        "Power beyond comprehension. Fear is justified.",
+        "Dismissed by many, but fear still lingers deep.",
+        "Prophecy detected, but fragmented and unclear.",
+        "Records vanish mysteriously, intent unknown."
+      ]
+    },
+    {
+      text: "How does the Frieza Force monitor Planet Vegeta?",
+      choices: [
+        "Through hidden scouters in the atmosphere.",
+        "Direct surveillance by elite commandos.",
+        "By intercepting all communications.",
+        "They do not watch — they prepare for war."
+      ],
+      outputs: [
+        "Scouter signals flicker; unseen eyes everywhere.",
+        "Commandos move silently, their presence unseen.",
+        "Communication lines corrupted, secrets leak slowly.",
+        "War drums echo faintly... prepare or perish."
+      ]
+    },
+    {
+      text: "What do you believe will happen soon?",
+      choices: [
+        "A purge of the Saiyan race by Frieza.",
+        "An uprising led by hidden Saiyan rebels.",
+        "The awakening of the Legendary Super Saiyan.",
+        "Planet Vegeta's destruction is imminent."
+      ],
+      outputs: [
+        "Dark plans unfold, survival odds dwindling.",
+        "Hope flickers amidst shadows of rebellion.",
+        "Power stirs deep beneath the surface.",
+        "Catastrophe looms — escape if you can."
+      ]
+    }
+  ];
+
+  const secretFiles = [
+    {
+      title: "Zui - Spaceport Low Management",
+      content: "Zui, a low-ranking but cunning officer at the spaceport, is known to favor Saiyans like Romesca and Bage. Quietly, he provides subtle assistance, a rare ally in a brutal world."
+    },
+    {
+      title: "Mang - The Rebel Who Owns a Moon",
+      content: "Mang, a rebellious alien with an unknown past, claims ownership of a hidden moon. His motives remain unclear but rumors suggest he harbors secrets threatening the Frieza Force."
+    },
+    {
+      title: "King Vegeta and Tarble",
+      content: "King Vegeta is rumored to have hidden a second son, Tarble, away from prying eyes. The boy’s existence is a carefully guarded secret, possibly to protect him from political machinations."
+    },
+    {
+      title: "The Moon and Oozaru",
+      content: "The Great Ape transformation is tied to the moon’s energy. Some files hint at a catastrophic experiment linked to the moon’s destruction and lost Oozaru secrets."
+    },
+    {
+      title: "Missing Spacepod - Last Seen With a Saiyan Warrior",
+      content: "A spacepod disappeared under mysterious circumstances. Last data indicates it was with a Saiyan warrior considered unimportant by most, but the truth may be far darker."
+    },
+    {
+      title: "Child with Power Above the Prince",
+      content: "Whispers circulate about a child born with power surpassing Prince Vegeta’s. Hidden away to prevent chaos, this child could change the balance of power on Planet Vegeta forever."
+    },
+    {
+      title: "Deep Dark Secrets",
+      content: "Data fragments hint at genocide plans and betrayals within the Frieza Force. The shadows grow longer, and time runs out for the Saiyan race."
+    }
+  ];
+
+  let currentQuestion = 0;
+  const outputArea = document.getElementById('output');
+  const questionText = document.getElementById('question-text');
+  const choicesDiv = document.getElementById('choices');
+
+  function loadQuestion() {
+    if (currentQuestion >= questions.length) {
+      questionText.textContent = "DECODING COMPLETE. INVESTIGATE DEEPER?";
+      choicesDiv.innerHTML = '';
+
+      const investigateBtn = document.createElement('button');
+      investigateBtn.className = 'choice';
+      investigateBtn.textContent = "Access Secret Files";
+      investigateBtn.onclick = showFiles;
+      choicesDiv.appendChild(investigateBtn);
+
+      outputArea.textContent = "Choose wisely. The truth is buried deep within the shadows.";
+      return;
     }
 
-    function addMoreQuests() {
-      var moreQuests = [
-        "Assist reconnaissance team",
-        "Sabotage enemy communications",
-        "Protect civilian convoy",
-        "Retrieve stolen artifacts",
-        "Neutralize rogue robots",
-        "Infiltrate enemy base",
-        "Destroy enemy weapon prototype",
-        "Secure strategic outpost",
-        "Escort diplomat to peace talks",
-        "Investigate mysterious signals",
-        "Recover lost intel",
-        "Train new recruits",
-        "Eliminate high-value targets",
-        "Conduct stealth mission",
-        "Navigate hazardous terrain"
-      ];
-      quests = quests.concat(moreQuests);
-      alert("15 more quests added!");
-    }
-  </script>
+    const q = questions[currentQuestion];
+    questionText.textContent = q.text;
+    choicesDiv.innerHTML = '';
+    outputArea.textContent = '';
+
+    q.choices.forEach((choice, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.textContent = choice;
+      btn.onclick = () => {
+        outputArea.textContent = q.outputs[idx];
+        currentQuestion++;
+        setTimeout(loadQuestion, 2500);
+      };
+      choicesDiv.appendChild(btn);
+    });
+  }
+
+  function showFiles() {
+    questionText.textContent = "SELECT FILE TO DECODE";
+    choicesDiv.innerHTML = '';
+    outputArea.textContent = '';
+
+    secretFiles.forEach((file, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'file-choice';
+      btn.textContent = file.title;
+      btn.onclick = () => {
+        outputArea.textContent = file.content;
+      };
+      choicesDiv.appendChild(btn);
+    });
+  }
+
+  loadQuestion();
+</script>
 </body>
 </html>
